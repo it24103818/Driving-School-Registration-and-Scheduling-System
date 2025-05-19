@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Renewal Queue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="container">
+    <h2>Membership Renewal Queue</h2>
+    <div th:if="${queue.isEmpty()}" class="alert alert-info">
+        No renewal requests in the queue.
+    </div>
+    <table class="table" th:unless="${queue.isEmpty()}">
+        <thead>
+        <tr>
+            <th>Request ID</th>
+            <th>Learner ID</th>
+            <th>Request Date</th>
+            <th>First Time Renewal</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${queue}">
+            <td th:text="${request.requestId}"></td>
+            <td th:text="${request.learnerId}"></td>
+            <td th:text="${request.requestDate}"></td>
+            <td th:text="${request.isFirstTime}"></td>
+            <td th:text="${request.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

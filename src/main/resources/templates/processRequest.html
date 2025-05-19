@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Process Renewal Request</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="container">
+    <h2>Process Renewal Request</h2>
+    <div th:if="${nextRequest}" class="card mb-3">
+        <div class="card-header">
+            Next Request to Process
+        </div>
+        <div class="card-body">
+            <p><strong>Request ID:</strong> <span th:text="${nextRequest.requestId}"></span></p>
+            <p><strong>Learner ID:</strong> <span th:text="${nextRequest.learnerId}"></span></p>
+            <p><strong>Request Date:</strong> <span th:text="${nextRequest.requestDate}"></span></p>
+            <p><strong>First Time Renewal:</strong> <span th:text="${nextRequest.isFirstTime} ? 'Yes' : 'No'"></span></p>
+            <p><strong>Status:</strong> <span th:text="${nextRequest.status}"></span></p>
+        </div>
+    </div>
+    <div th:unless="${nextRequest}" class="alert alert-info">
+        No requests to process.
+    </div>
+    <form th:action="@{/processRequest}" method="post" th:if="${nextRequest}">
+        <div class="mb-3">
+            <label class="form-label">Approve or Reject the next request:</label>
+            <select class="form-select" name="approve">
+                <option value="true">Approve</option>
+                <option value="false">Reject</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Process</button>
+    </form>
+    <div th:if="${message}" class="alert alert-info mt-3" th:text="${message}"></div>
+</div>
+</body>
+</html>
