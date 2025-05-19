@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Feedback</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="container mt-5">
+    <h2 class="text-forest-brown">Submit Feedback</h2>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${reviewDTO == null}">
+        <p>Error: Feedback form not initialized.</p>
+    </div>
+    <form th:if="${reviewDTO != null}" th:action="@{/reviews/submit}" th:object="${reviewDTO}" method="post" class="bg-light p-4 rounded shadow">
+        <input type="hidden" th:field="*{reviewId}">
+        <div class="mb-3">
+            <label for="learnerId" class="form-label text-forest-green">Learner ID</label>
+            <input type="text" class="form-control" id="learnerId" th:field="*{learnerId}" required>
+        </div>
+        <div class="mb-3">
+            <label for="reviewType" class="form-label text-forest-green">Review Type</label>
+            <select class="form-select" id="reviewType" th:field="*{reviewType}" required>
+                <option value="">Select Type</option>
+                <option value="Instructor">Instructor</option>
+                <option value="Lesson">Lesson</option>
+            </select>
+        </div>
+        <div class="mb-3" id="instructorIdField" style="display: none;">
+            <label for="instructorId" class="form-label text-forest-green">Instructor ID</label>
+            <input type="text" class="form-control" id="instructorId" th:field="*{instructorId}">
+        </div>
+        <div class="mb-3" id="lessonIdField" style="display: none;">
+            <label for="lessonId" class="form-label text-forest-green">Lesson ID</label>
+            <input type="text" class="form-control" id="lessonId" th:field="*{lessonId}">
+        </div>
+        <div class="mb-3">
+            <label for="rating" class="form-label text-forest-green">Rating (1-5)</label>
+            <input type="number" class="form-control" id="rating" th:field="*{rating}" min="1" max="5" required>
+        </div>
+        <div class="mb-3">
+            <label for="comment" class="form-label text-forest-green">Comment</label>
+            <textarea class="form-control" id="comment" th:field="*{comment}" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-forest-green">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewTypeSelect = document.getElementById('reviewType');
+        const instructorIdField = document.getElementById('instructorIdField');
+        const lessonIdField = document.getElementById('lessonIdField');
+
+        function updateFields() {
+            const selectedType = reviewTypeSelect.value;
+            if (selectedType === 'Instructor') {
+                instructorIdField.style.display = 'block';
+                lessonIdField.style.display = 'none';
+            } else if (selectedType === 'Lesson') {
+                instructorIdField.style.display = 'none';
+                lessonIdField.style.display = 'block';
+            } else {
+                instructorIdField.style.display = 'none';
+                lessonIdField.style.display = 'none';
+            }
+        }
+
+        updateFields();
+        reviewTypeSelect.addEventListener('change', updateFields);
+    });
+</script>
+</body>
+</html>
