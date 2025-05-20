@@ -1,0 +1,188 @@
+/* Custom styles for the Membership Renewal Queue application */
+body {
+    background-color: #ECEFF1; /* Warm Gray */
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #F5F5F5; /* Cream White */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+h2 {
+    color: #212121; /* Deep Charcoal */
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #212121; /* Deep Charcoal */
+}
+
+.form-control, .form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #2E7D32; /* Forest Green */
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+}
+
+.btn-primary {
+    background-color: #2E7D32; /* Forest Green */
+    border: none;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #AED581; /* Sage Green */
+}
+
+.alert {
+    margin-top: 20px;
+    border-radius: 5px;
+    font-weight: 500;
+    background-color: #AED581; /* Sage Green */
+    color: #212121; /* Deep Charcoal for contrast */
+}
+
+.table {
+    margin-top: 20px;
+    background-color: #F5F5F5; /* Cream White */
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.table th {
+    background-color: #2E7D32; /* Forest Green */
+    color: #FFFFFF; /* White text for contrast */
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Style for critical actions (e.g., delete button) */
+.btn-danger {
+    background-color: #D32F2F; /* Signal Red */
+    border: none;
+    color: #FFFFFF;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c; /* Darker red on hover */
+}
+
+/* Navbar styling (if you added one) */
+.navbar {
+    background-color: #2E7D32; /* Forest Green */
+}
+
+.navbar-brand, .nav-link {
+    color: #FFFFFF !important;
+}
+
+.nav-link:hover {
+    color: #AED581 !important; /* Sage Green on hover */
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 15px;
+        margin-top: 20px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn-primary, .btn-danger {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    /* Forest Journey Palette */
+    .bg-forest-green {
+        background-color: #2E7D32; /* Primary forest green */
+    }
+
+    .text-forest-green {
+        color: #2E7D32;
+    }
+
+    .text-forest-brown {
+        color: #5D4037; /* Earthy brown for headings */
+    }
+
+    .btn-forest-green {
+        background-color: #2E7D32;
+        color: white;
+    }
+
+    .btn-forest-green:hover {
+        background-color: #1B5E20; /* Darker green on hover */
+    }
+
+    /* Container and form styling */
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    form.bg-light {
+        background-color: #F1F8E9; /* Light green background for forms */
+    }
+
+    .shadow {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+}
+.navbar {
+    background: linear-gradient(to right, #2C3E50, #4A6B47) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 15px 0;
+}
+.navbar-brand {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #f8f9fa !important;
+    transition: color 0.3s;
+}
+.navbar-brand:hover {
+    color: #A9CBA4 !important;
+}
+.nav-link {
+    color: #f8f9fa !important;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.nav-link:hover {
+    background-color: #A9CBA4;
+    color: #2C3E50 !important;
+    border-radius: 5px;
+}
+.dropdown-menu {
+    background-color: #4A6B47;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.dropdown-item {
+    color: #f8f9fa;
+    transition: background-color 0.3s, color 0.3s;
+}
+.dropdown-item:hover {
+    background-color: #A9CBA4;
+    color: #2C3E50;
+}
