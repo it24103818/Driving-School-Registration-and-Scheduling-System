@@ -27,7 +27,7 @@ public class LearnerController {
     public String showRegistrationForm(Model model) {
         // Use a default concrete subclass (e.g., BeginnerLearner) for form binding
         model.addAttribute("learner", new BeginnerLearner("", "", "", "", LocalDate.now()));
-        return "learner-register";
+        return "register";
     }
 
     @PostMapping("/register")
@@ -40,10 +40,10 @@ public class LearnerController {
             return "redirect:/learner/view";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "learner-register";
+            return "register";
         } catch (IOException e) {
             model.addAttribute("error", "Failed to save learner: " + e.getMessage());
-            return "learner-register";
+            return "register";
         }
     }
 
