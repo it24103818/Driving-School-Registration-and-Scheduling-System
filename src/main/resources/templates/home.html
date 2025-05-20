@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Driving Learners</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-image: url('/images/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+        .footer {
+            margin-top: auto;
+            padding: 10px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="overlay">
+    <div class="content">
+        <h1 class="display-4">Welcome to Driving Learners</h1>
+        <p class="lead">Your journey to mastering the roads starts here with expert instructors and flexible lessons.</p>
+        <div class="mt-4">
+            <a href="/learner/register" class="btn btn-success btn-lg me-2">Register Now</a>
+            <a href="/reviews/view" class="btn btn-outline-light btn-lg">View Reviews</a>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>© 2025 Driving Learners. All rights reserved.</p>
+</div>
+</body>
+</html>
