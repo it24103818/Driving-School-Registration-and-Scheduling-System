@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Learner Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="container mt-5">
+  <h2 class="text-forest-brown">Learner Profile</h2>
+  <div class="card bg-light p-4 rounded shadow">
+    <p><strong>ID:</strong> <span th:text="${learner.id}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${learner.name}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${learner.email}"></span></p>
+    <p><strong>License Type:</strong> <span th:text="${learner.licenseType}"></span></p>
+    <p><strong>Contact:</strong> <span th:text="${learner.contact}"></span></p>
+    <p><strong>Expiry Date:</strong> <span th:text="${learner.expiryDate}"></span></p>
+    <p><strong>Progress:</strong> <span th:text="${learner.trackProgress()}"></span></p>
+    <a th:href="@{/learner/update/{id}(id=${learner.id})}" class="btn btn-forest-green mt-3">Update Profile</a>
+  </div>
+</div>
+</body>
+</html>

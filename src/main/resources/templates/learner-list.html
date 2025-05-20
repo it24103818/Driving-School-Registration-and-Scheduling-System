@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Learner List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div th:replace="~{fragments/header :: navbar}"></div>
+
+<div class="container mt-5">
+  <h2 class="text-forest-brown">All Learners</h2>
+
+  <!-- Search Form -->
+  <form th:action="@{/learner/view}" th:object="${searchCriteria}" method="get" class="mb-4 bg-light p-4 rounded shadow">
+    <div class="row">
+      <div class="col-md-5">
+        <label for="id" class="form-label text-forest-green">Search by ID</label>
+        <input type="text" class="form-control" id="id" th:field="*{id}" placeholder="Enter ID">
+      </div>
+      <div class="col-md-5">
+        <label for="email" class="form-label text-forest-green">Search by Email</label>
+        <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter email">
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-forest-green w-100">Search</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Display error message if search yields no results -->
+  <div th:if="${searchPerformed and learners.isEmpty()}" class="alert alert-warning">
+    <span th:text="${error}"></span>
+  </div>
+
+  <!-- Learner Table -->
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>License Type</th>
+      <th>Contact</th>
+      <th>Expiry Date</th>
+      <th>Renewal Eligibility</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="learner : ${learners}">
+      <td th:text="${learner.id}"></td>
+      <td th:text="${learner.name}"></td>
+      <td th:text="${learner.email}"></td>
+      <td th:text="${learner instanceof T(com.drivinglearners.driving_learners.model.BeginnerLearner) ? 'Beginner' : 'Advanced'}"></td>
+      <td th:text="${learner.contact}"></td>
+      <td th:text="${learner.expiryDate}"></td>
+      <td th:text="${learner.isEligibleForRenewal() ? 'Eligible' : 'Not Eligible'}"></td>
+      <td>
+        <a th:href="@{/learner/profile/{id}(id=${learner.id})}" class="btn btn-forest-green btn-sm">View Profile</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Reset Link to Show All Learners -->
+  <div th:if="${searchPerformed and !learners.isEmpty()}">
+    <a th:href="@{/learner/view}" class="btn btn-secondary">Show All Learners</a>
+  </div>
+</div>
+</body>
+</html>
