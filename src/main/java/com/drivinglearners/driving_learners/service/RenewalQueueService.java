@@ -7,13 +7,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class RenewalQueueService {
-    private final Queue<RenewalRequest> renewalQueue = new LinkedList<>();
+    private final CustomQueue renewalQueue = new CustomQueue();
     private final String FILE_PATH = "requests.txt";
     private final AtomicLong requestIdCounter = new AtomicLong(1);
 
@@ -33,16 +31,16 @@ public class RenewalQueueService {
         saveRequestsToFile();
     }
 
-    public Queue<RenewalRequest> getQueue() {
+    public CustomQueue getQueue() {
         return renewalQueue;
     }
 
     public RenewalRequest peekNextRequest() {
-        return renewalQueue.peek(); // Returns the next request without removing it
+        return renewalQueue.peek();
     }
 
     public String processRequest(boolean approve) {
-        RenewalRequest request = renewalQueue.poll();
+        RenewalRequest request = renewalQueue.remove();
         if (request == null) {
             return null;
         }
@@ -96,18 +94,8 @@ public class RenewalQueueService {
                 try {
                     String[] parts = line.split(",");
                     RenewalRequest request;
-                    if (parts.length == 3) {
-                        String learnerId = parts[0];
-                        LocalDate requestDate = LocalDate.parse(parts[1]);
-                        boolean isFirstTime = Boolean.parseBoolean(parts[2]);
-                        if (isFirstTime) {
-                            request = new FirstTimeRenewalRequest(learnerId, requestDate);
-                        } else {
-                            request = new ReturningRenewalRequest(learnerId, requestDate);
-                        }
-                        request.setRequestId(requestIdCounter.getAndIncrement());
-                        request.setStatus("Pending");
-                    } else if (parts.length == 5) {
+                    // Only support the 5-part format: requestId,learnerId,requestDate,isFirstTime,status
+                    if (parts.length == 5) {
                         Long requestId = Long.parseLong(parts[0]);
                         String learnerId = parts[1];
                         LocalDate requestDate = LocalDate.parse(parts[2]);
@@ -122,6 +110,7 @@ public class RenewalQueueService {
                         request.setStatus(status);
                         requestIdCounter.set(Math.max(requestIdCounter.get(), requestId + 1));
                     } else {
+                        System.err.println("Skipping malformed line in requests.txt: " + line);
                         continue;
                     }
                     renewalQueue.add(request);
@@ -136,9 +125,15 @@ public class RenewalQueueService {
 
     private void saveRequestsToFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (RenewalRequest request : renewalQueue) {
+            CustomQueue tempQueue = new CustomQueue();
+            while (!renewalQueue.isEmpty()) {
+                RenewalRequest request = renewalQueue.remove();
                 writer.write(request.toString());
                 writer.newLine();
+                tempQueue.add(request);
+            }
+            while (!tempQueue.isEmpty()) {
+                renewalQueue.add(tempQueue.remove());
             }
         } catch (IOException e) {
             e.printStackTrace();
