@@ -1,6 +1,7 @@
 package com.drivinglearners.driving_learners.controller;
 
 import com.drivinglearners.driving_learners.model.RenewalRequest;
+import com.drivinglearners.driving_learners.service.CustomQueue;
 import com.drivinglearners.driving_learners.service.RenewalQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Queue;
 
 @Controller
 public class RenewalQueueController {
@@ -38,14 +37,16 @@ public class RenewalQueueController {
 
     @GetMapping("/viewQueue")
     public String viewQueue(Model model) {
-        Queue<RenewalRequest> queue = queueService.getQueue();
-        model.addAttribute("queue", queue);
+        CustomQueue queue = queueService.getQueue();
+        RenewalRequest[] queueArray = queue.toArray();
+        model.addAttribute("queue", queueArray);
+        model.addAttribute("debug", "Queue size: " + queue.size());
         return "viewQueue";
     }
 
     @GetMapping("/processRequest")
     public String showProcessRequestForm(Model model) {
-        RenewalRequest nextRequest = queueService.peekNextRequest(); // Peek at the next request without removing it
+        RenewalRequest nextRequest = queueService.peekNextRequest();
         model.addAttribute("nextRequest", nextRequest);
         return "processRequest";
     }
@@ -58,7 +59,7 @@ public class RenewalQueueController {
         } else {
             model.addAttribute("message", "No requests to process.");
         }
-        RenewalRequest nextRequest = queueService.peekNextRequest(); // Update next request after processing
+        RenewalRequest nextRequest = queueService.peekNextRequest();
         model.addAttribute("nextRequest", nextRequest);
         return "processRequest";
     }
