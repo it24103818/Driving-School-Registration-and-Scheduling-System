@@ -10,12 +10,16 @@
 <body>
 <div th:replace="~{fragments/header :: navbar}"></div>
 
-<div class="container">
-    <h2>Membership Renewal Queue</h2>
-    <div th:if="${queue.isEmpty()}" class="alert alert-info">
+<div class="container mt-5">
+    <h2 class="text-forest-brown">Membership Renewal Queue</h2>
+    <p th:text="${debug}" class="text-success fw-bold"></p>
+    <div th:if="${queue == null}" class="alert alert-danger">
+        Error: Queue data is null.
+    </div>
+    <div th:unless="${queue == null}" th:if="${#arrays.length(queue) == 0}" class="alert alert-info">
         No renewal requests in the queue.
     </div>
-    <table class="table" th:unless="${queue.isEmpty()}">
+    <table class="table table-bordered" th:unless="${queue == null or #arrays.length(queue) == 0}">
         <thead>
         <tr>
             <th>Request ID</th>
@@ -27,14 +31,18 @@
         </thead>
         <tbody>
         <tr th:each="request : ${queue}">
-            <td th:text="${request.requestId}"></td>
-            <td th:text="${request.learnerId}"></td>
-            <td th:text="${request.requestDate}"></td>
-            <td th:text="${request.isFirstTime}"></td>
-            <td th:text="${request.status}"></td>
+            <td th:text="${request.requestId != null ? request.requestId : 'N/A'}"></td>
+            <td th:text="${request.learnerId != null ? request.learnerId : 'N/A'}"></td>
+            <td th:text="${request.requestDate != null ? #temporals.format(request.requestDate, 'yyyy-MM-dd') : 'N/A'}"></td>
+            <td th:text="${request.isFirstTime() ? 'Yes' : 'No'}"></td>
+            <td th:text="${request.status != null ? request.status : 'N/A'}"></td>
         </tr>
         </tbody>
     </table>
+    <div class="mt-4 d-flex gap-2">
+        <a th:href="@{/submitRequest}" class="btn btn-forest-green btn-lg rounded shadow">Submit New Request</a>
+        <a th:href="@{/processRequest}" class="btn btn-forest-green btn-lg rounded shadow">Process Requests</a>
+    </div>
 </div>
 </body>
 </html>
