@@ -25,26 +25,46 @@ public class LearnerController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        // Use a default concrete subclass (e.g., BeginnerLearner) for form binding
+        System.out.println("Showing registration form at " + LocalDate.now());
         model.addAttribute("learner", new BeginnerLearner("", "", "", "", LocalDate.now()));
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerLearner(@ModelAttribute Learner learner, @RequestParam String licenseType, Model model) {
+    public String registerLearner(@ModelAttribute BeginnerLearner learner, @RequestParam String licenseType, Model model) {
+        System.out.println("Received registration request: " + learner + ", LicenseType: " + licenseType);
         try {
+            // Create the appropriate learner type based on the selected licenseType
             Learner newLearner = licenseType.equals("Beginner")
                     ? new BeginnerLearner(learner.getId(), learner.getName(), learner.getEmail(), learner.getContact(), learner.getExpiryDate())
                     : new AdvancedLearner(learner.getId(), learner.getName(), learner.getEmail(), learner.getContact(), learner.getExpiryDate());
+            newLearner.setLicenseType(licenseType); // Ensure licenseType is set
+            System.out.println("Checking for existing learner with ID: " + newLearner.getId());
+            if (getLearnerById(newLearner.getId()) != null) {
+                throw new IllegalArgumentException("Learner with ID " + newLearner.getId() + " already exists.");
+            }
+            System.out.println("Creating new learner: " + newLearner);
             learnerService.createLearner(newLearner);
+            System.out.println("Learner created successfully, redirecting to view");
             return "redirect:/learner/view";
         } catch (IllegalArgumentException e) {
+            System.err.println("IllegalArgumentException: " + e.getMessage());
             model.addAttribute("error", e.getMessage());
             return "register";
         } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
             model.addAttribute("error", "Failed to save learner: " + e.getMessage());
             return "register";
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            model.addAttribute("error", "Unexpected error: " + e.getMessage());
+            return "register";
         }
+    }
+
+    // Helper method to check existing learner by ID
+    private Learner getLearnerById(String id) throws IOException {
+        return learnerService.getLearnerById(id);
     }
 
     @GetMapping("/view")
